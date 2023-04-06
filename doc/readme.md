@@ -40,3 +40,22 @@
 - nacteni vsech informaci o danem filmu ze souboru (jeden soubor = jeden film)
 - ukonceni - ulozeni do sql
 - spusteni - nacteni ze sql
+
+
+## Struktura
+- abstract class Crew
+- class Actor extends Crew
+- class Animator extends Crew
+- class Director extends Crew
+
+- abstract? class Review
+- class AnimatedFilmReview extends Review
+- class ActedFilmReview extends Review
+
+- abstract? class Film
+- class ActedFilm extends Film
+- class AnimatedFilm extends Film
+
+- ulozit do sql pri zavreni
+- nacist z sql pri otevreni
+
