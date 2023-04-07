@@ -1,4 +1,5 @@
 # Filmova Databaze
+---
 ## Zakladni Prehled
 - databaze pro spravu seznamu filmu
 - film:
@@ -44,18 +45,45 @@
 
 ## Struktura
 - abstract class Crew
-- class Actor extends Crew
-- class Animator extends Crew
-- class Director extends Crew
+    - class Actor extends Crew
+    - class Animator extends Crew
+    - class Director extends Crew
+- abstract class Review
+    - class AnimatedFilmReview extends Review
+    - class ActedFilmReview extends Review
+- abstract class Film
+    - class ActedFilm extends Film
+    - class AnimatedFilm extends Film
+- DB classes
+    - CrewDB
+    - ReviewDB
+    - FilmDB
+- SQLDataProvider interface
+- SQLDataHandler class
+---
 
-- abstract? class Review
-- class AnimatedFilmReview extends Review
-- class ActedFilmReview extends Review
+![Struktura programu](struktura.png "Struktura programu")
 
-- abstract? class Film
-- class ActedFilm extends Film
-- class AnimatedFilm extends Film
-
-- ulozit do sql pri zavreni
-- nacist z sql pri otevreni
-
+---
+## TODO
+- [ ] Uzivatelske rozhrani
+    - [ ] pridani filmu
+    - [ ] uprava filmu
+    - [ ] smazani filmu
+    - [ ] pridani hodnoceni
+    - [ ] vypis filmu
+    - [ ] vypis hercu s vice filmy
+    - [ ] vypis filmu s konkretnim hercem
+    - [ ] ulozeni informace o jednom filmu do souboru
+    - [ ] nacteni informace o jednom filmu ze souboru
+    - [ ] ui polish
+    - [ ] vyuziti sql loading / saving
+- [ ] Databaze, datove typy, zprostredkovatele
+    - [ ] review a potomci
+    - [ ] film a potomci
+    - [ ] crew a potomci
+    - [ ] CrewDB
+    - [ ] FilmDB
+    - [ ] ReviewDB
+    - [ ] SQLDataProvider interface
+    - [ ] SQLHandler
