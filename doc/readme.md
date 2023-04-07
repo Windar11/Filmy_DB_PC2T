@@ -66,7 +66,7 @@
 
 ---
 ## TODO
-- [ ] Uzivatelske rozhrani
+- [ ] Uzivatelske rozhrani - @Windar11
     - [ ] pridani filmu
     - [ ] uprava filmu
     - [ ] smazani filmu
@@ -78,10 +78,10 @@
     - [ ] nacteni informace o jednom filmu ze souboru
     - [ ] ui polish
     - [ ] vyuziti sql loading / saving
-- [ ] Databaze, datove typy, zprostredkovatele
-    - [ ] review a potomci
-    - [ ] film a potomci
-    - [ ] crew a potomci
+- [ ] Databaze, datove typy, zprostredkovatele - @Otas02CZ
+    - [x] review a potomci
+    - [x] film a potomci
+    - [x] crew a potomci
     - [ ] CrewDB
     - [ ] FilmDB
     - [ ] ReviewDB
