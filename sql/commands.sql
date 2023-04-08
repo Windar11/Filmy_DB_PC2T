@@ -5,7 +5,7 @@ DROP DATABASE Film_db IF EXISTS;
 CREATE TABLE Film_db.Film (
     id INT NOT NULL AUTO_INCREMENT,
     name TEXT,
-    year SMALLINT,
+    release_year SMALLINT,
     recommended_age TINYINT,
     PRIMARY KEY (id)
 );

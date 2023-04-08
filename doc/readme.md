@@ -3,7 +3,7 @@
 ## Zakladni Prehled
 - databaze pro spravu seznamu filmu
 - film:
-    - reziser, rok vydani, seznam hercu, hodnoceni - bodove, slovni
+    - reziser, rok vydani, seznam hercu/animatoru, hodnoceni - bodove, slovni
     - dva typy filmu
         - hrane
             - herci jako herci
@@ -47,19 +47,18 @@
 - abstract class Crew
     - class Actor extends Crew
     - class Animator extends Crew
-    - class Director extends Crew
 - abstract class Review
     - class AnimatedFilmReview extends Review
     - class ActedFilmReview extends Review
 - abstract class Film
     - class ActedFilm extends Film
     - class AnimatedFilm extends Film
-- DB classes
-    - CrewDB
-    - ReviewDB
-    - FilmDB
-- SQLDataProvider interface
-- SQLDataHandler class
+    - v každém filmu je navíc i režisér, seznam crew a seznam hodnocení
+    - obsahuje metody pro ziskani dat jako ArrayListu
+- FilmDB class
+    - obsahuje metody pro ukladani/nacitani z/do sql
+    - obsahuje databazi vsech filmu
+
 ---
 
 ![Struktura programu](struktura.png "Struktura programu")
@@ -82,8 +81,4 @@
     - [x] review a potomci
     - [x] film a potomci
     - [x] crew a potomci
-    - [ ] CrewDB
     - [ ] FilmDB
-    - [ ] ReviewDB
-    - [ ] SQLDataProvider interface
-    - [ ] SQLHandler

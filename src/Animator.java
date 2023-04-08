@@ -4,7 +4,8 @@ public class Animator extends CrewMember{
         this.name = name;
     }
 
+    @Override
     public String getOccupation() {
-        return "Animátor";
+        return "animátor";
     }
 }

@@ -1,7 +1,7 @@
 public abstract class CrewMember {
     protected String name;
 
-    abstract String getOccupation();
+    public abstract String getOccupation();
 
     public String getName() {
         return name;

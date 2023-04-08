@@ -4,7 +4,8 @@ public class Actor extends CrewMember{
         this.name = name;
     }
 
+    @Override
     public String getOccupation() {
-        return "Herec";
+        return "herec";
     }
 }

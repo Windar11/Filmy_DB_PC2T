@@ -4,13 +4,14 @@ public abstract class Review {
 
     Review() {
         this.comment = "";
+        this.points = 0;
     }
 
     public short getPoints() {
         return this.points;
     }
 
-    abstract void setPoints(short points);
+    abstract boolean setPoints(short points);
 
     public String getComment() {
         return this.comment;
