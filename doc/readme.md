@@ -9,7 +9,7 @@
             - herci jako herci
             - bodove hodnoceni 1 - 5 (hvezdicky)
         - animovane
-            - herci jako animatori
+            - herci jako daberi
             - bodove hodnoceni jako 1 - 10 (kladne cislo)
             - navic doporuceny vek divaka
 
