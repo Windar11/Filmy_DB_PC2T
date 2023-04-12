@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public abstract class Film {
     protected String name = "";
@@ -9,8 +8,7 @@ public abstract class Film {
     protected ArrayList<CrewMember> crewMembers = new ArrayList<>();
     protected ArrayList<Review> filmReviews = new ArrayList<>();
 
-    Film() {
-    }
+
     public String getName() {
         return this.name;
     }
@@ -45,10 +43,6 @@ public abstract class Film {
     public void addReview(Review review) {
         this.filmReviews.add(review);
     }
-
-//    public getCrewMemberByName(String name) throws CrewMemberNotExists {
-//
-//    }
 
     public ArrayList<CrewMember> getCrewMembers() {
         return crewMembers;

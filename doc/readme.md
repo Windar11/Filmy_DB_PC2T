@@ -97,3 +97,8 @@ xdfhgdfgfgdfgfsghgdf        - hrane
     - [x] film a potomci
     - [x] crew a potomci
     - [ ] FilmDB
+    - [ ] CrewDB
+    - [ ] ReviewDB
+    - [ ] SQLHandler
+    - [ ] SQLDataProvider
+    - [ ] DatabaseBackend
