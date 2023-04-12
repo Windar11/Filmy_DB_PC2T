@@ -47,17 +47,28 @@
 - abstract class Crew
     - class Actor extends Crew
     - class Animator extends Crew
+    - class ? Director extends Crew ?? mit jej jako ptomka crew nebo samostatne, ci jen jako string jmena?
 - abstract class Review
     - class AnimatedFilmReview extends Review
     - class ActedFilmReview extends Review
 - abstract class Film
     - class ActedFilm extends Film
     - class AnimatedFilm extends Film
+    - moznost A
+        - v kazdem filmu je jeste reziser a seznam odkazu na jeho herce/animatory a hodnoceni do jinych db
+        - obsahuje metody zjednodusujici praci s daty
+    - moznost B
+
+    - moznost C
+
     - v každém filmu je navíc i režisér, seznam crew a seznam hodnocení
     - obsahuje metody pro ziskani dat jako ArrayListu
 - FilmDB class
     - obsahuje metody pro ukladani/nacitani z/do sql
     - obsahuje databazi vsech filmu
+- ReviewDB class and CrewDB class
+- AllDBHandler class
+
 
 ---
 
