@@ -5,7 +5,7 @@
 - film:
     - reziser, rok vydani, seznam hercu/animatoru, hodnoceni - bodove, slovni
     - dva typy filmu
-        - hrane
+xdfhgdfgfgdfgfsghgdf        - hrane
             - herci jako herci
             - bodove hodnoceni 1 - 5 (hvezdicky)
         - animovane
@@ -55,19 +55,23 @@
     - class ActedFilm extends Film
     - class AnimatedFilm extends Film
     - moznost A
-        - v kazdem filmu je jeste reziser a seznam odkazu na jeho herce/animatory a hodnoceni do jinych db
-        - obsahuje metody zjednodusujici praci s daty
-    - moznost B
-
-    - moznost C
-
-    - v každém filmu je navíc i režisér, seznam crew a seznam hodnocení
-    - obsahuje metody pro ziskani dat jako ArrayListu
-- FilmDB class
-    - obsahuje metody pro ukladani/nacitani z/do sql
+        - v kazdem filmu je seznam odkazu na jeho herce/animatory/rezisera a hodnoceni do jinych db
+    - obsahuje metody zjednodusujici praci s daty
+- FilmDB class - implements SQLDataProvider
+    - obsahuje metody pro praci s filmy
     - obsahuje databazi vsech filmu
-- ReviewDB class and CrewDB class
+- ReviewDB class - implements SQLDataProvider
+    - obshauje metody pro praci s hodnocenimi
+    - obsahuje databazi vsech hodnoceni
+- CrewDB class - implements SQLDataProvider
+    - obshauje metody pro praci herci/animatory/rezisery
+    - obsahuje databazi vsech crewMembers
 - AllDBHandler class
+    - pracuje a obsahuje
+- SQLDataProvider interface
+    - obsahuje sadu funkci pro zjednoduseni praci s sql - funcke pro hromadne ziskani a ulozeni dat
+- SQLHandler class
+    - stara se o nacitani / ukladani dat sql-interni databaze
 
 
 ---

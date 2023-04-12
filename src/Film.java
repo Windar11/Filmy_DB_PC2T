@@ -4,8 +4,9 @@ import java.util.HashMap;
 public abstract class Film {
     protected String name = "";
     protected short releaseYear = 0;
-    protected String directorName = "";
-    protected HashMap<String, CrewMember> filmCrew = new HashMap<>();
+    protected FilmType filmType;
+    protected Director director;
+    protected ArrayList<CrewMember> crewMembers = new ArrayList<>();
     protected ArrayList<Review> filmReviews = new ArrayList<>();
 
     Film() {
@@ -24,32 +25,36 @@ public abstract class Film {
         this.releaseYear = releaseYear;
     }
 
-    public void setDirectorName(String directorName) {
-        this.directorName = directorName;
+    public FilmType getFilmType() {
+        return filmType;
     }
-    public String getDirectorName() {
-        return this.directorName;
+    public void setFilmType(FilmType filmType) {
+        this.filmType = filmType;
+    }
+
+    public void setDirector(Director director) {
+        this.director = director;
+    }
+    public Director getDirector() {
+        return this.director;
     }
 
     public ArrayList<Review> getFilmReviews() {
         return this.filmReviews;
     }
-    public abstract boolean addReview(String comment, short points);
-
-    public CrewMember getCrewMemberByName(String name) throws CrewMemberNotExists {
-        if (!this.filmCrew.containsKey(name))
-            throw new CrewMemberNotExists();
-        return this.filmCrew.get(name);
+    public void addReview(Review review) {
+        this.filmReviews.add(review);
     }
 
-    public ArrayList<CrewMember> getAllCrewMembers() {
-        ArrayList<CrewMember> crewMembers = new ArrayList<>();
-        crewMembers.
-        for (CrewMember crewMember: this.filmCrew.values()) {
-            crewMembers.add(crewMember);
-        }
+//    public getCrewMemberByName(String name) throws CrewMemberNotExists {
+//
+//    }
+
+    public ArrayList<CrewMember> getCrewMembers() {
         return crewMembers;
     }
 
-    public abstract void addCrewMember(String name);
+    public void addCrewMember(CrewMember crewMember) {
+        this.crewMembers.add(crewMember);
+    }
 }
