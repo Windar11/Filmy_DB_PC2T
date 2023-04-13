@@ -60,7 +60,4 @@ public abstract class Film {
     public void removeCrewMember(CrewMember crewMember) {
         this.crewMembers.remove(crewMember);
     }
-    public void removeFilmReview(Review review) {
-        this.filmReviews.remove(review);
-    }
 }

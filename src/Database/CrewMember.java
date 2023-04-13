@@ -9,9 +9,10 @@ public class CrewMember {
     CrewMember(String name) {
         this.name = name;
     }
-    public void addParticipation(Film film) {
+    public void addParticipation(Film film) throws CrewMemberAlreadyParticipating {
         if (!this.participatedIn.contains(film))
             this.participatedIn.add(film);
+        throw new CrewMemberAlreadyParticipating();
     }
     public ArrayList<Film> getParticipations() {
         return this.participatedIn;

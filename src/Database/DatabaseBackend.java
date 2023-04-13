@@ -40,6 +40,10 @@ public class DatabaseBackend {
         if (previousDirector.getParticipations().isEmpty())
             this.crewMembers.remove(previousDirector);
         film.setDirector(director);
+        try {
+            director.addParticipation(film);
+        }
+        catch (CrewMemberAlreadyParticipating ignored) {}
     }
     public ArrayList<Film> getFilmsByName(String filmName) {
         ArrayList<Film> foundFilms = new ArrayList<>();
@@ -69,11 +73,11 @@ public class DatabaseBackend {
             throw new FilmNotExists();
         this.films.get(this.films.indexOf(film)).setReleaseYear(releaseYear);
     }
-    public void filmAddCrewMemberExistingCrewMember(Film film, CrewMember crewMember) throws FilmNotExists, CrewMemberNotExists {
+    public void filmAddCrewMemberExistingCrewMember(Film film, CrewMember crewMember) throws FilmNotExists, CrewMemberAlreadyParticipating {
         if (!this.films.contains(film))
             throw new FilmNotExists();
         if (!film.addCrewMember(crewMember))
-            throw new CrewMemberNotExists();
+            throw new CrewMemberAlreadyParticipating();
         else
             crewMember.addParticipation(film);
     }
@@ -93,7 +97,9 @@ public class DatabaseBackend {
         if (!this.films.contains(film))
             throw new FilmNotExists();
         CrewMember crewMember = new CrewMember(name);
-        crewMember.addParticipation(film);
+        try {
+            crewMember.addParticipation(film);
+        } catch (CrewMemberAlreadyParticipating ignored) {}
         film.addCrewMember(crewMember);
         this.crewMembers.add(crewMember);
     }
@@ -102,7 +108,10 @@ public class DatabaseBackend {
         if (!this.films.contains(film))
             throw new FilmNotExists();
         CrewMember newDirector = new CrewMember(name);
-        newDirector.addParticipation(film);
+        try {
+            newDirector.addParticipation(film);
+        }
+        catch (CrewMemberAlreadyParticipating ignored) {}
         this.crewMembers.add(newDirector);
         CrewMember previousDirector = film.getDirector();
         ArrayList<CrewRole> directorsRolesInFilm = previousDirector.getRolesInGivenFilm(film);
