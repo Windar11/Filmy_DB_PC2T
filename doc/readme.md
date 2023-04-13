@@ -59,9 +59,11 @@
     - v kazdem filmu je seznam odkazu na jeho herce/animatory/rezisera a hodnoceni do jinych db
     - obsahuje metody zjednodusujici praci s daty
 - DatabaseBackend
-    - ma arraylisty vsech typu data (Review, Film, crewMember)
+    - ma arraylisty Filmu a CrewMemberu
     - zprostredkovava veskerou praci s nimi
     - zprostredkovava praci s sql
+- SQLHanlder
+    - provides communication with sql
 
 
 ---
@@ -90,3 +92,4 @@
         - [x] Everything except SQL
         - [ ] SQL Saving
         - [ ] SQL Loading
+    - [ ] SQLHandler

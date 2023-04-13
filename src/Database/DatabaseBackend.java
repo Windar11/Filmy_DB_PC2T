@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class DatabaseBackend {
     private ArrayList<Film> films = new ArrayList<>();
-    private ArrayList<Review> reviews = new ArrayList<>();
     private ArrayList<CrewMember> crewMembers = new ArrayList<>();
 
     public void addFilm(String name, short releaseYear, FilmType filmType) throws OutOfMemoryError {
@@ -22,9 +21,6 @@ public class DatabaseBackend {
                 crewMember.removeFilmFromParticipations(film);
                 if (crewMember.getParticipations().size()==0)
                     this.crewMembers.remove(crewMember);
-            }
-            for (Review review: film.getFilmReviews()) {
-                this.reviews.remove(review);
             }
             this.films.remove(film);
         }
@@ -143,14 +139,12 @@ public class DatabaseBackend {
             review.setPoints(score);
             review.setComment(commentary);
             film.addReview(review);
-            this.reviews.add(review);
         }
         if (film.getFilmType()==FilmType.ACTED_FILM) {
             Review review = new ActedFilmReview();
             review.setPoints(score);
             review.setComment(commentary);
             film.addReview(review);
-            this.reviews.add(review);
         }
     }
 
@@ -159,6 +153,7 @@ public class DatabaseBackend {
     }
 
     public void saveDataToSQL() {
+
         // TODO add saving to sql feature
     }
 }
