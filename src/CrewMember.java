@@ -1,11 +1,15 @@
 import java.util.ArrayList;
 
-public abstract class CrewMember {
+public class CrewMember {
     protected String name;
     protected ArrayList<Film> participatedIn = new ArrayList<>();
 
+    CrewMember(String name) {
+        this.name = name;
+    }
     public void addParticipation(Film film) {
-        this.participatedIn.add(film);
+        if (!this.participatedIn.contains(film))
+            this.participatedIn.add(film);
     }
     public ArrayList<Film> getParticipations() {
         return this.participatedIn;
@@ -30,6 +34,9 @@ public abstract class CrewMember {
             }
         }
         return rolesInFilm;
+    }
+    public void removeFilmFromParticipations(Film film) {
+        participatedIn.remove(film);
     }
     public String getName() {
         return name;
