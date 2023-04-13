@@ -1,3 +1,5 @@
+package Database;
+
 public enum FilmType {
     ACTED_FILM("hraný"),
     ANIMATED_FILM("animovaný")

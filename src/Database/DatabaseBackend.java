@@ -1,3 +1,5 @@
+package Database;
+
 import java.util.ArrayList;
 
 public class DatabaseBackend {
@@ -28,7 +30,7 @@ public class DatabaseBackend {
         }
         throw new FilmNotExists();
     }
-    public void updateFilmDirectorWithExistingDirector(Film film, CrewMember director) throws FilmNotExists {
+    public void filmUpdateDirectorWithExistingDirector(Film film, CrewMember director) throws FilmNotExists {
         if (!this.films.contains(film))
             throw new FilmNotExists();
         CrewMember previousDirector = film.getDirector();
@@ -57,12 +59,12 @@ public class DatabaseBackend {
         return foundFilms;
     }
 
-    public void updateFilmName(Film film, String name) throws FilmNotExists {
+    public void filmUpdateName(Film film, String name) throws FilmNotExists {
         if (!this.films.contains(film))
             throw new FilmNotExists();
         this.films.get(this.films.indexOf(film)).setName(name);
     }
-    public void updateFilmReleaseYear(Film film, short releaseYear) throws FilmNotExists {
+    public void filmUpdateReleaseYear(Film film, short releaseYear) throws FilmNotExists {
         if (!this.films.contains(film))
             throw new FilmNotExists();
         this.films.get(this.films.indexOf(film)).setReleaseYear(releaseYear);
@@ -123,5 +125,31 @@ public class DatabaseBackend {
             }
         }
         return crewMembersWithMoreFilms;
+    }
+    public void filmAddReview(Film film, short score, String commentary) throws FilmNotExists, ReviewIncorrectAmmountOfPoints, OutOfMemoryError {
+        if (!this.films.contains(film))
+            throw new FilmNotExists();
+        if (film.getFilmType()==FilmType.ANIMATED_FILM) {
+            Review review = new AnimatedFilmReview();
+            review.setPoints(score);
+            review.setComment(commentary);
+            film.addReview(review);
+            this.reviews.add(review);
+        }
+        if (film.getFilmType()==FilmType.ACTED_FILM) {
+            Review review = new ActedFilmReview();
+            review.setPoints(score);
+            review.setComment(commentary);
+            film.addReview(review);
+            this.reviews.add(review);
+        }
+    }
+
+    public void loadDataFromSQL() {
+        // TODO add loading from sql feature
+    }
+
+    public void saveDataToSQL() {
+        // TODO add saving to sql feature
     }
 }

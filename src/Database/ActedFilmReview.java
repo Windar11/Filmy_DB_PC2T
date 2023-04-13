@@ -1,14 +1,15 @@
+package Database;
+
 public class ActedFilmReview extends Review{
     ActedFilmReview() {
         super();
     }
 
     @Override
-    public boolean setPoints(short points) {
+    public void setPoints(short points) throws ReviewIncorrectAmmountOfPoints {
         if (points >= 1 && points <= 5) {
             this.points = points;
-            return true;
         }
-        return false;
+        throw new ReviewIncorrectAmmountOfPoints();
     }
 }

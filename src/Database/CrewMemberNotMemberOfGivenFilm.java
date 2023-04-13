@@ -1,3 +1,5 @@
+package Database;
+
 public class CrewMemberNotMemberOfGivenFilm extends Exception {
     CrewMemberNotMemberOfGivenFilm() {
         super("Daný spoluautor filmu se ve skutečnosti na filmu nepodílí.");

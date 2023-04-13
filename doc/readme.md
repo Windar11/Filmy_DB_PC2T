@@ -5,7 +5,7 @@
 - film:
     - reziser, rok vydani, seznam hercu/animatoru, hodnoceni - bodove, slovni
     - dva typy filmu
-xdfhgdfgfgdfgfsghgdf        - hrane
+        - hrane
             - herci jako herci
             - bodove hodnoceni 1 - 5 (hvezdicky)
         - animovane
@@ -44,34 +44,24 @@ xdfhgdfgfgdfgfsghgdf        - hrane
 
 
 ## Struktura
-- abstract class Crew
-    - class Actor extends Crew
-    - class Animator extends Crew
-    - class ? Director extends Crew ?? mit jej jako ptomka crew nebo samostatne, ci jen jako string jmena?
+- CrewMember class
+    - info about crewMember
+    - links to films where they participate
+    - their Director/Actor/Animator status is determined by the film they are participating in
+    - they can be a director in one film and animator/actor in another one
+    - they even can be director and animator/actor in the same film
 - abstract class Review
     - class AnimatedFilmReview extends Review
     - class ActedFilmReview extends Review
 - abstract class Film
     - class ActedFilm extends Film
     - class AnimatedFilm extends Film
-    - moznost A
-        - v kazdem filmu je seznam odkazu na jeho herce/animatory/rezisera a hodnoceni do jinych db
+    - v kazdem filmu je seznam odkazu na jeho herce/animatory/rezisera a hodnoceni do jinych db
     - obsahuje metody zjednodusujici praci s daty
-- FilmDB class - implements SQLDataProvider
-    - obsahuje metody pro praci s filmy
-    - obsahuje databazi vsech filmu
-- ReviewDB class - implements SQLDataProvider
-    - obshauje metody pro praci s hodnocenimi
-    - obsahuje databazi vsech hodnoceni
-- CrewDB class - implements SQLDataProvider
-    - obshauje metody pro praci herci/animatory/rezisery
-    - obsahuje databazi vsech crewMembers
-- AllDBHandler class
-    - pracuje a obsahuje
-- SQLDataProvider interface
-    - obsahuje sadu funkci pro zjednoduseni praci s sql - funcke pro hromadne ziskani a ulozeni dat
-- SQLHandler class
-    - stara se o nacitani / ukladani dat sql-interni databaze
+- DatabaseBackend
+    - ma arraylisty vsech typu data (Review, Film, crewMember)
+    - zprostredkovava veskerou praci s nimi
+    - zprostredkovava praci s sql
 
 
 ---
@@ -92,13 +82,11 @@ xdfhgdfgfgdfgfsghgdf        - hrane
     - [ ] nacteni informace o jednom filmu ze souboru
     - [ ] ui polish
     - [ ] vyuziti sql loading / saving
-- [ ] Databaze, datove typy, zprostredkovatele - @Otas02CZ
+- [ ] Databaze, datove typy, zprostredkovatele, sql - @Otas02CZ
     - [x] review a potomci
     - [x] film a potomci
     - [x] crew a potomci
-    - [ ] FilmDB
-    - [ ] CrewDB
-    - [ ] ReviewDB
-    - [ ] SQLHandler
-    - [ ] SQLDataProvider
     - [ ] DatabaseBackend
+        - [x] Everything except SQL
+        - [ ] SQL Saving
+        - [ ] SQL Loading

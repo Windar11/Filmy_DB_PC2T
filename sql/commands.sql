@@ -26,11 +26,11 @@ CREATE TABLE Film_db.Review (
     PRIMARY KEY (id)
 );
 
-TRUNCATE TABLE Film_db.Film;
+TRUNCATE TABLE Film_db.Database.Film;
 DROP TABLE Film_db.Film;
 
 TRUNCATE TABLE Film_db.Crew;
 DROP TABLE Film_db.Crew;
 
-TRUNCATE TABLE Film_db.Review;
+TRUNCATE TABLE Film_db.Database.Review;
 DROP TABLE Film_db.Review;

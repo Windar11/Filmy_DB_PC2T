@@ -1,3 +1,5 @@
+package Database;
+
 public abstract class Review {
     protected short points;
     protected String comment;
@@ -11,7 +13,7 @@ public abstract class Review {
         return this.points;
     }
 
-    abstract boolean setPoints(short points);
+    abstract void setPoints(short points) throws ReviewIncorrectAmmountOfPoints;
 
     public String getComment() {
         return this.comment;
