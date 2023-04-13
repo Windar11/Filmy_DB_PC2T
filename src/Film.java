@@ -4,7 +4,7 @@ public abstract class Film {
     protected String name = "";
     protected short releaseYear = 0;
     protected FilmType filmType;
-    protected Director director;
+    protected CrewMember director;
     protected ArrayList<CrewMember> crewMembers = new ArrayList<>();
     protected ArrayList<Review> filmReviews = new ArrayList<>();
 
@@ -30,10 +30,10 @@ public abstract class Film {
         this.filmType = filmType;
     }
 
-    public void setDirector(Director director) {
+    public void setDirector(CrewMember director) {
         this.director = director;
     }
-    public Director getDirector() {
+    public CrewMember getDirector() {
         return this.director;
     }
 
@@ -48,7 +48,17 @@ public abstract class Film {
         return crewMembers;
     }
 
-    public void addCrewMember(CrewMember crewMember) {
+    public boolean addCrewMember(CrewMember crewMember) {
+        if (this.crewMembers.contains(crewMember))
+            return false;
         this.crewMembers.add(crewMember);
+        return true;
+    }
+
+    public void removeCrewMember(CrewMember crewMember) {
+        this.crewMembers.remove(crewMember);
+    }
+    public void removeFilmReview(Review review) {
+        this.filmReviews.remove(review);
     }
 }
