@@ -62,7 +62,7 @@
     - ma arraylisty Filmu a CrewMemberu
     - zprostredkovava veskerou praci s nimi
     - zprostredkovava praci s sql
-- SQLHanlder
+- SQLHandler
     - provides communication with sql
 
 
@@ -83,13 +83,13 @@
     - [ ] ulozeni informace o jednom filmu do souboru
     - [ ] nacteni informace o jednom filmu ze souboru
     - [ ] ui polish
-    - [ ] vyuziti sql loading / saving
-- [ ] Databaze, datove typy, zprostredkovatele, sql - @Otas02CZ
+    - [x] vyuziti sql loading / saving (kinda done)
+- [x] Databaze, datove typy, zprostredkovatele, sql - @Otas02CZ
     - [x] review a potomci
     - [x] film a potomci
     - [x] crew a potomci
-    - [ ] DatabaseBackend
+    - [x] DatabaseBackend
         - [x] Everything except SQL
-        - [ ] SQL Saving
-        - [ ] SQL Loading
-    - [ ] SQLHandler
+        - [x] SQL Saving
+        - [x] SQL Loading
+    - [x] SQLHandler

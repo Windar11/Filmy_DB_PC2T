@@ -6,7 +6,7 @@ CREATE TABLE Film_db.Film (
     id INT NOT NULL AUTO_INCREMENT,
     name TEXT,
     release_year SMALLINT,
-    recommended_age TINYINT,
+    recommended_age INT,
     PRIMARY KEY (id)
 );
 

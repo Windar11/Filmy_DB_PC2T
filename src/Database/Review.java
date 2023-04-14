@@ -1,7 +1,7 @@
 package Database;
 
 public abstract class Review {
-    protected short points;
+    protected byte points;
     protected String comment;
 
     Review() {
@@ -9,11 +9,11 @@ public abstract class Review {
         this.points = 0;
     }
 
-    public short getPoints() {
+    public byte getPoints() {
         return this.points;
     }
 
-    abstract void setPoints(short points) throws ReviewIncorrectAmmountOfPoints;
+    abstract void setPoints(byte points) throws ReviewIncorrectAmmountOfPoints;
 
     public String getComment() {
         return this.comment;

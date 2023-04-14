@@ -7,6 +7,7 @@ public abstract class Film {
     protected short releaseYear = 0;
     protected FilmType filmType;
     protected CrewMember director;
+    protected byte recommendedAge;
     protected ArrayList<CrewMember> crewMembers = new ArrayList<>();
     protected ArrayList<Review> filmReviews = new ArrayList<>();
 
@@ -59,5 +60,11 @@ public abstract class Film {
 
     public void removeCrewMember(CrewMember crewMember) {
         this.crewMembers.remove(crewMember);
+    }
+    public void setRecommendedAge(byte recommendedAge) {
+        this.recommendedAge = recommendedAge;
+    }
+    public byte getRecommendedAge() {
+        return this.recommendedAge;
     }
 }

@@ -6,10 +6,11 @@ public class AnimatedFilmReview extends Review {
     }
 
     @Override
-    public void setPoints(short points) throws ReviewIncorrectAmmountOfPoints {
+    public void setPoints(byte points) throws ReviewIncorrectAmmountOfPoints {
         if (points >= 1 && points <= 10) {
             this.points = points;
         }
-        throw new ReviewIncorrectAmmountOfPoints();
+        else
+            throw new ReviewIncorrectAmmountOfPoints();
     }
 }
