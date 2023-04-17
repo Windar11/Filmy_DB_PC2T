@@ -8,6 +8,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="sqlite-jdbc-3.41.2.1" level="project" />
-    <orderEntry type="library" name="gson-2.10.1" level="project" />
+    <orderEntry type="library" name="json_org" level="project" />
   </component>
 </module>

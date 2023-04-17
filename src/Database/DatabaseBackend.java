@@ -1,11 +1,17 @@
 package Database;
 
-import com.google.gson.JsonObject;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import java.io.*;
+import java.nio.Buffer;
+import java.nio.charset.StandardCharsets;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import json.org;
 
 public class DatabaseBackend {
     private ArrayList<Film> films = new ArrayList<>();
@@ -263,14 +269,36 @@ public class DatabaseBackend {
         return true;
     }
 
-    public boolean loadFilmFromFile(String fileName) {
-        //TODO add film loading functionality
-
+    public JSONObject loadFilmFromFile(String fileName) throws JSONException, IOException {
+        //TODO add film loading functionality - maybe do it differently
+        BufferedReader bufferedReader = new BufferedReader(new FileReader("fileName", StandardCharsets.UTF_8));
+        JSONTokener tokener = new JSONTokener(bufferedReader);
+        JSONObject filmJSON = new JSONObject(tokener);
+        return filmJSON;
     }
 
-    public boolean saveFilmToFile(String fileName, Film film) {
-        //TODO add film saving functionality
-        JsonObject filmJSON = new JsonObject();
-        filmJSON
+    public void saveFilmToFile(String fileName, Film film) throws JSONException, IOException {
+        JSONObject filmJSON = new JSONObject();
+        filmJSON.put("filmName", film.getName());
+        filmJSON.put("releaseYear", film.getReleaseYear());
+        filmJSON.put("filmType", film.getFilmType().toString());
+        filmJSON.put("director", film.getDirector().getName());
+        filmJSON.put("recommendedAge", film.getRecommendedAge());
+        JSONArray reviewsJSON = new JSONArray();
+        for (Review review : film.getFilmReviews()) {
+            JSONObject reviewJSON = new JSONObject();
+            reviewJSON.put("comment", review.getComment());
+            reviewJSON.put("score", review.getPoints());
+            reviewsJSON.put(reviewJSON);
+        }
+        filmJSON.put("reviews", reviewsJSON);
+        JSONArray crewMembersJSON = new JSONArray();
+        for (CrewMember crewMember : film.getCrewMembers()) {
+            crewMembersJSON.put(crewMember.getName());
+        }
+        filmJSON.put("crewMembers", crewMembersJSON);
+        PrintWriter writer = new PrintWriter(fileName, StandardCharsets.UTF_8);
+        writer.println(filmJSON);
+        writer.close();
     }
 }
