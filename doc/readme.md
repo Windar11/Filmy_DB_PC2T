@@ -62,6 +62,8 @@
     - ma arraylisty Filmu a CrewMemberu
     - zprostredkovava veskerou praci s nimi
     - zprostredkovava praci s sql
+    - funkce pro ukladani do souboru
+    - funkce pro nacitani ze souboru
 - SQLHandler
     - provides communication with sql
 
@@ -92,4 +94,6 @@
         - [x] Everything except SQL
         - [x] SQL Saving
         - [x] SQL Loading
+        - [ ] save to file
+        - [ ] load from file
     - [x] SQLHandler

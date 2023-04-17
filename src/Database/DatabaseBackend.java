@@ -1,8 +1,11 @@
 package Database;
 
+import com.google.gson.JsonObject;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import json.org;
 
 public class DatabaseBackend {
     private ArrayList<Film> films = new ArrayList<>();
@@ -258,5 +261,16 @@ public class DatabaseBackend {
             return false;
         }
         return true;
+    }
+
+    public boolean loadFilmFromFile(String fileName) {
+        //TODO add film loading functionality
+
+    }
+
+    public boolean saveFilmToFile(String fileName, Film film) {
+        //TODO add film saving functionality
+        JsonObject filmJSON = new JsonObject();
+        filmJSON
     }
 }
