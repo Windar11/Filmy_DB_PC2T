@@ -33,10 +33,10 @@ public abstract class Film {
         this.filmType = filmType;
     }
 
-    public void setDirector(CrewMember director) {
+    protected void setDirector(CrewMember director) {
         this.director = director;
     }
-    public CrewMember getDirector() {
+    protected CrewMember getDirector() {
         return this.director;
     }
 
@@ -51,14 +51,14 @@ public abstract class Film {
         return crewMembers;
     }
 
-    public boolean addCrewMember(CrewMember crewMember) {
+    protected boolean addCrewMember(CrewMember crewMember) {
         if (this.crewMembers.contains(crewMember))
             return false;
         this.crewMembers.add(crewMember);
         return true;
     }
 
-    public void removeCrewMember(CrewMember crewMember) {
+    protected void removeCrewMember(CrewMember crewMember) {
         this.crewMembers.remove(crewMember);
     }
     public void setRecommendedAge(byte recommendedAge) {

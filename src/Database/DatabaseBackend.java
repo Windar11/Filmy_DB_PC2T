@@ -142,6 +142,14 @@ public class DatabaseBackend {
         return this.crewMembers;
     }
 
+    public ArrayList<CrewMember> getCrewMembersByName(String memberName) {
+        ArrayList<CrewMember> foundMembers = new ArrayList<>();
+        for (CrewMember crewMember: this.crewMembers) {
+            if (crewMember.getName().equals(memberName))
+                foundMembers.add(crewMember);
+        }
+        return foundMembers;
+    }
     public ArrayList<CrewMember> getAllCrewMembersWithMoreFilms() {
         ArrayList<CrewMember> crewMembersWithMoreFilms = new ArrayList<>();
         for (CrewMember crewMember : this.crewMembers) {
@@ -269,36 +277,95 @@ public class DatabaseBackend {
         return true;
     }
 
-    public JSONObject loadFilmFromFile(String fileName) throws JSONException, IOException {
-        //TODO add film loading functionality - maybe do it differently
-        BufferedReader bufferedReader = new BufferedReader(new FileReader("fileName", StandardCharsets.UTF_8));
-        JSONTokener tokener = new JSONTokener(bufferedReader);
-        JSONObject filmJSON = new JSONObject(tokener);
-        return filmJSON;
+    public Film loadFilmFromFile(String fileName) throws FilmImportError {
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader("fileName", StandardCharsets.UTF_8));
+            JSONTokener tokener = new JSONTokener(bufferedReader);
+            JSONObject filmJSON = new JSONObject(tokener);
+            Film film;
+            String filmTypeName = filmJSON.getString("filmType");
+            String filmName = filmJSON.getString("filmName");
+            short releaseYear = (short) filmJSON.getInt("releaseYear");
+            byte recommendedAge = (byte) filmJSON.getInt("recommendedAge");
+            String directorName = filmJSON.getString("director");
+            JSONArray reviews = filmJSON.getJSONArray("reviews");
+            JSONArray crewMembers = filmJSON.getJSONArray("crewMembers");
+            FilmType filmType;
+            if (filmTypeName.equals(FilmType.ACTED_FILM.toString()))
+                filmType = FilmType.ACTED_FILM;
+            else if (filmTypeName.equals(FilmType.ANIMATED_FILM.toString()))
+                filmType = FilmType.ANIMATED_FILM;
+            else
+                throw new BadFileInput();
+
+            ArrayList<Film> filmsWithSameName = this.getFilmsByName(filmName);
+            if (filmsWithSameName.size() != 0)
+                filmName += " !i";
+            switch (filmType) {
+                case ACTED_FILM -> film = new ActedFilm(filmName, releaseYear, recommendedAge);
+                case ANIMATED_FILM -> film = new AnimatedFilm(filmName, releaseYear);
+                default -> throw new BadFileInput();
+            }
+
+            ArrayList<CrewMember> crewMembersWithSameName = this.getCrewMembersByName(directorName);
+            if (crewMembersWithSameName.size() != 0)
+                directorName += " !i";
+            this.filmUpdateDirectorNewDirector(film, directorName);
+            for (int i = 0; i < reviews.length(); i++) {
+                JSONObject reviewJSON = reviews.getJSONObject(i);
+                String comment = reviewJSON.getString("comment");
+                Byte points = (byte) reviewJSON.getInt("score");
+                Review review;
+                switch (filmType) {
+                    case ACTED_FILM -> review = new ActedFilmReview();
+                    case ANIMATED_FILM -> review = new AnimatedFilmReview();
+                    default -> throw new BadFileInput();
+                }
+                review.setComment(comment);
+                review.setPoints(points);
+                film.addReview(review);
+            }
+            for (int i = 0; i < crewMembers.length(); i++) {
+                String crewMemberName = crewMembers.getString(i);
+                crewMembersWithSameName = this.getCrewMembersByName(crewMemberName);
+                if (crewMembersWithSameName.size() != 0)
+                    crewMemberName += " !i";
+                this.filmAddCrewMemberNewCrewMember(film, crewMemberName);
+            }
+            return film;
+        }
+        catch (Exception e) {
+            throw new FilmImportError();
+        }
     }
 
-    public void saveFilmToFile(String fileName, Film film) throws JSONException, IOException {
-        JSONObject filmJSON = new JSONObject();
-        filmJSON.put("filmName", film.getName());
-        filmJSON.put("releaseYear", film.getReleaseYear());
-        filmJSON.put("filmType", film.getFilmType().toString());
-        filmJSON.put("director", film.getDirector().getName());
-        filmJSON.put("recommendedAge", film.getRecommendedAge());
-        JSONArray reviewsJSON = new JSONArray();
-        for (Review review : film.getFilmReviews()) {
-            JSONObject reviewJSON = new JSONObject();
-            reviewJSON.put("comment", review.getComment());
-            reviewJSON.put("score", review.getPoints());
-            reviewsJSON.put(reviewJSON);
+    public void saveFilmToFile(String fileName, Film film) throws FilmExportError {
+        try {
+            JSONObject filmJSON = new JSONObject();
+            filmJSON.put("filmName", film.getName());
+            filmJSON.put("releaseYear", film.getReleaseYear());
+            filmJSON.put("filmType", film.getFilmType().toString());
+            filmJSON.put("director", film.getDirector().getName());
+            filmJSON.put("recommendedAge", film.getRecommendedAge());
+            JSONArray reviewsJSON = new JSONArray();
+            for (Review review : film.getFilmReviews()) {
+                JSONObject reviewJSON = new JSONObject();
+                reviewJSON.put("comment", review.getComment());
+                reviewJSON.put("score", review.getPoints());
+                reviewsJSON.put(reviewJSON);
+            }
+            filmJSON.put("reviews", reviewsJSON);
+            JSONArray crewMembersJSON = new JSONArray();
+            for (CrewMember crewMember : film.getCrewMembers()) {
+                crewMembersJSON.put(crewMember.getName());
+            }
+            filmJSON.put("crewMembers", crewMembersJSON);
+            PrintWriter writer = new PrintWriter(fileName, StandardCharsets.UTF_8);
+            writer.println(filmJSON);
+            writer.close();
         }
-        filmJSON.put("reviews", reviewsJSON);
-        JSONArray crewMembersJSON = new JSONArray();
-        for (CrewMember crewMember : film.getCrewMembers()) {
-            crewMembersJSON.put(crewMember.getName());
+        catch (Exception e) {
+            throw new FilmExportError();
         }
-        filmJSON.put("crewMembers", crewMembersJSON);
-        PrintWriter writer = new PrintWriter(fileName, StandardCharsets.UTF_8);
-        writer.println(filmJSON);
-        writer.close();
     }
 }

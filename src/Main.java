@@ -9,12 +9,6 @@ public class Main {
             System.out.println("Error pri nahravanie");
             // VRACI FALSE POKUD NACITANI Z SQL DATABAZE SELZE - je treba resit v user interface
         }
-        ArrayList <Film> filmiki = databaseBackend.getFilmsByName("Titanic");
-        for (Film film : filmiki )
-        {
-           // databaseBackend.filmAddCrewMemberExistingCrewMember();
-            // databaseBackend.filmAddCrewMemberNewCrewMember();
-        }
         // nasledujici try-catch kod je pouze testovaci, zatim zde asi ponechat, kdyby bylo potreba testovat funkci backendu ci databaze,
         // zatim ponechej a ignoruj
         /*try {
