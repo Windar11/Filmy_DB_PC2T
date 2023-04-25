@@ -2,7 +2,7 @@ package Database;
 
 public enum CrewRole {
     ACTOR("herec"),
-    ANIMATOR("dabér"),
+    DUBBER("dabér"),
     DIRECTOR("režisér")
     ;
 

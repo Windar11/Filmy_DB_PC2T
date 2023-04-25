@@ -31,7 +31,7 @@ public class CrewMember {
                     rolesInFilm.add(CrewRole.ACTOR);
                     break;
                 case ANIMATED_FILM:
-                    rolesInFilm.add(CrewRole.ANIMATOR);
+                    rolesInFilm.add(CrewRole.DUBBER);
                     break;
                 default:
                     break;
