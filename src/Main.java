@@ -120,6 +120,7 @@ public class Main {
         // pokud nefunguje databaze tak zkus jit do File->Project Structure->Libraries->Pridat->Vyber knihovnu sqlite-jdbc ze slozky libs v koreni projektu a potvrdit
         // Where is our user interface?
         // Gone reduced to attoms.
+        // Then we should travel in time before the snap to save it.
 
         if (!databaseBackend.saveDataToSQL()) {
             System.out.println("Error pri ukladanie");
