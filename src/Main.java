@@ -4,6 +4,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+
+//funtion for correct short input
+
+
+
+
 public class Main {
     public static void main(String[] args) throws IOException {
         DatabaseBackend databaseBackend = new DatabaseBackend();
@@ -33,70 +39,164 @@ public class Main {
 
             choice = 0;
             Film film;
+            CrewMember crewMember;
             Scanner scanner = new Scanner(System.in);
             choice = scanner.nextInt();
 
                 switch (choice)
                 {
                     case 1:
-                        System.out.println("Vyberte druh filmu :");
-                        System.out.println("1. Hraný film");
-                        System.out.println("2. Animovaný film");
-                        try
+                        int sc;
+                        do
                         {
-                            int sc = scanner.nextInt();
-                           if (sc == 1)
-                               isAnimated = false;
-                           else if (sc==2)
-                                isAnimated = true;
+                            System.out.println("Vyberte druh filmu :");
+                            System.out.println("1. Hraný film");
+                            System.out.println("2. Animovaný film");
+                            try
+                            {
+                                sc = scanner.nextInt();
+                                if (sc == 1)
+                                    isAnimated = false;
+                                else if (sc==2)
+                                    isAnimated = true;
 
-                        } catch (Exception e)
-                        {
-                            throw new RuntimeException(e);
-                        }
+                            } catch (Exception e)
+                            {
+                                throw new RuntimeException(e);
+                            }
+
+                            scanner.nextLine();
+                        }while(sc != 1 && sc != 2);
+
+
 
                         System.out.println("Zadajte názov filmu :");
-                        String movie_name = scanner.next();
+                        String movie_name = scanner.nextLine();
 
 
                         System.out.println("Zadajte rok vydania filmu :");
-                        short year = scanner.nextShort();
+                        short year = getShort(scanner);
 
-                        System.out.println("Zadajte meno režiséra filmu :");
-                        String director = scanner.next();
 
                         if(isAnimated)
                         {
                             System.out.println("Zadajte doporučený vek :");
-                            byte age = scanner.nextByte();
+                            byte age = getByte(scanner);
                             film = databaseBackend.addFilm(movie_name, year, FilmType.ANIMATED_FILM, age);
                         }else
                             film = databaseBackend.addFilm(movie_name, year, FilmType.ACTED_FILM, (byte)0);
 
 
-                        try {
-                            databaseBackend.filmUpdateDirectorNewDirector(film, director);
-                        } catch (FilmNotExists e) {
-                            throw new RuntimeException(e);
+
+
+                        ArrayList<CrewMember> crewMembers = databaseBackend.getAllCrewMembers();
+                       int vyber = vyberCrewMembers(databaseBackend,"režiséra", scanner);
+
+                        if(vyber == crewMembers.size())
+                        {
+                            System.out.println("Zadajte meno režiséra filmu :");
+                            String director = scanner.nextLine();
+                            try {
+                                databaseBackend.filmUpdateDirectorNewDirector(film, director);
+                            } catch (FilmNotExists e) {
+                                //ignore
+                            }
                         }
+                        else
+                        {
+                            try {
+                                databaseBackend.filmUpdateDirectorExistingDirector(film, crewMembers.get(vyber));
+                            } catch (FilmNotExists e) {
+                                //ignore
+
+                            }
+                        }
+
+                        do
+                        {
+                            if(isAnimated)
+                                System.out.println("Chcete pridať dabera?");
+                            else
+                                System.out.println("Chcete pridať herca?");
+
+                            try
+                            {
+                                System.out.println("1. Ano");
+                                System.out.println("2. Nie");
+                                sc = scanner.nextInt();
+                                scanner.nextLine();
+                                if (sc == 1)
+                                {
+                                    if(isAnimated)
+                                        vyber = vyberCrewMembers(databaseBackend,"dabera", scanner);
+                                    else
+                                        vyber = vyberCrewMembers(databaseBackend,"herca", scanner);
+
+
+                                    if(vyber == crewMembers.size())
+                                    {
+                                        if(isAnimated)
+                                            System.out.println("Zadajte meno dabera.");
+                                        else
+                                            System.out.println("Zadajte meno herca.");
+
+                                        String crewMemberName = scanner.nextLine();
+                                        try {
+                                            databaseBackend.filmAddCrewMemberNewCrewMember(film, crewMemberName);
+                                        } catch (FilmNotExists e) {
+                                            //ignore
+                                        }
+                                    }
+                                    else
+                                    {
+                                        try {
+                                            databaseBackend.filmAddCrewMemberExistingCrewMember(film, crewMembers.get(vyber));
+                                        } catch (FilmNotExists e) {
+                                            //ignore
+
+                                        }
+                                    }
+
+                                }
+                                else if (sc==2)
+                                    break;
+
+                            } catch (Exception e)
+                            {
+                                throw new RuntimeException(e);
+                            }
+                        }while(true);
+
                         break;
+
+                    case 2:
+                        System.out.println("Zadajte názov filmu, ktorý chcete upraviť.");
+                        movie_name = scanner.nextLine();
+
+                        ArrayList<Film> films = databaseBackend.getFilmsByName(movie_name);
+                        if(films.size() == 1)
+                        {
+                            film = films.get(0);
+
+                        }
+
+
+                        break;
+
                     case 0:
 
                         break;
+
+
                     case 11:
                         System.out.println("Koniec programu");
+                        scanner.close();
                         break;
 
                 }
 
 
-
-
-
-
-
         }while(choice != 11);
-
 
         // nasledujici try-catch kod je pouze testovaci, zatim zde asi ponechat, kdyby bylo potreba testovat funkci backendu ci databaze,
         // zatim ponechej a ignoruj
@@ -121,10 +221,78 @@ public class Main {
         // Where is our user interface?
         // Gone reduced to attoms.
         // Then we should travel in time before the snap to save it.
+        // We are students. We can pretend we can program all day, but...that up there, that's the jáva...we'll lose.
 
         if (!databaseBackend.saveDataToSQL()) {
             System.out.println("Error pri ukladanie");
             // vraci FALSE pokud ukladani selze
         }
     }
+
+    public static short getShort(Scanner scanner) {
+        short input = 0;
+        boolean isCorrect = false;
+        while (!isCorrect) {
+            try {
+                input = Short.parseShort(scanner.nextLine());
+                isCorrect = true;
+            } catch (Exception e) {
+                System.out.println("Zadajte správny formát");
+                scanner.nextLine();
+            }
+        }
+        return input;
+    }
+
+    public static int getInt(Scanner scanner) {
+        int input = 0;
+        boolean isCorrect = false;
+        while (!isCorrect) {
+            try {
+                input = Integer.parseInt(scanner.nextLine());
+                isCorrect = true;
+            } catch (Exception e) {
+                System.out.println("Zadajte správny formát");
+                scanner.nextLine();
+            }
+        }
+        return input;
+    }
+
+    public static byte getByte(Scanner scanner) {
+        byte input = 0;
+        boolean isCorrect = false;
+        while (!isCorrect) {
+            try {
+                input = Byte.parseByte(scanner.nextLine());
+                isCorrect = true;
+            } catch (Exception e) {
+                System.out.println("Zadajte správny formát");
+                scanner.nextLine();
+            }
+        }
+        return input;
+    }
+
+    public static int vyberCrewMembers(DatabaseBackend databaseBackend, String type, Scanner scanner)
+    {
+        ArrayList<CrewMember> crewMembers = databaseBackend.getAllCrewMembers();
+        int index = 0;
+        for ( index=0; index< crewMembers.size(); index++)
+        {
+            System.out.println(index+ ": " +crewMembers.get(index).getName());
+        }
+        System.out.println(index+ ": Nová osoba");
+
+        int vyber = -1;
+        do
+        {
+            System.out.println("Vyberte si "+ type + ".");
+            vyber = getInt(scanner);
+
+        }while(vyber<0 || vyber >index);
+        return vyber;
+    }
+
+
 }
