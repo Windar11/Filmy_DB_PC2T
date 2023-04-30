@@ -36,7 +36,7 @@ public abstract class Film {
     protected void setDirector(CrewMember director) {
         this.director = director;
     }
-    protected CrewMember getDirector() {
+    public CrewMember getDirector() {
         return this.director;
     }
 

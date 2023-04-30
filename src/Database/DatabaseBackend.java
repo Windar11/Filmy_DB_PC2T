@@ -85,6 +85,11 @@ public class DatabaseBackend {
             throw new FilmNotExists();
         this.films.get(this.films.indexOf(film)).setReleaseYear(releaseYear);
     }
+    public void filmUpdateRecomendedAge(Film film, byte recomendedAge) throws FilmNotExists {
+        if (!this.films.contains(film))
+            throw new FilmNotExists();
+        this.films.get(this.films.indexOf(film)).setRecommendedAge(recomendedAge);
+    }
     public void filmAddCrewMemberExistingCrewMember(Film film, CrewMember crewMember) throws FilmNotExists, CrewMemberAlreadyParticipating {
         if (!this.films.contains(film))
             throw new FilmNotExists();
