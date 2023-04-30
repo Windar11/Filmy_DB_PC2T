@@ -184,6 +184,7 @@ public class DatabaseBackend {
             review.setComment(commentary);
             film.addReview(review);
         }
+        film.sortReviews();
     }
 
     public boolean crewMemberExists(CrewMember crewMember) {

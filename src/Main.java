@@ -36,10 +36,11 @@ public class Main {
             System.out.println("11. Ukončiť program");
 
             choice = 0;
-            Film film;
+            Film film = null;
             CrewMember crewMember;
             Scanner scanner = new Scanner(System.in);
             choice = scanner.nextInt();
+            scanner.nextLine();
 
                 switch (choice)
                 {
@@ -164,42 +165,20 @@ public class Main {
                         }while(true);
 
                         break;
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// CASE 2
                     case 2:
-                        scanner.nextLine();
+
                         System.out.println("Zadajte názov filmu, ktorý chcete upraviť.");
+                        String message = ("Vyberte, ktorú variáciu filmu chcete upraviť.");
+
                         movie_name = scanner.nextLine();
 
                         ArrayList<Film> films = databaseBackend.getFilmsByName(movie_name);
-                        if(films.size() == 0)
-                        {
-                            System.out.println("Film neexistuje.");
+                        try{film = films.get(selectFilm(scanner,message, films) );}
+                        catch (Exception e){
                             break;
-
-                        }else if(films.size() == 1)
-                        {
-                            film = films.get(0);
-
-                        } else
-                        {
-                            do
-                            {
-                                System.out.println("Vyberte, ktorú variáciu filmu chcete upraviť.");
-                                for(int i=0; i< films.size();i++)
-                                {
-                                    //String directorName = getDirectorName(films.get(i));
-                                    String directorName = films.get(i).getDirector().getName();
-                                    if(directorName == null)
-                                        directorName= "(žiadny režisér)";
-
-                                    System.out.println(i+ ": " +films.get(i).getName()+"    rok: "+films.get(i).getReleaseYear()+"   režisér: "+directorName+"   typ:"+films.get(i).getFilmType());
-                                }
-                                sc = scanner.nextInt();
-                                scanner.nextLine();
-                            }while (sc < 0 || sc >= films.size());
-                            film = films.get(sc);
                         }
-                        scanner.nextLine();
+
                         int uprava;
                         do
                         {
@@ -305,7 +284,7 @@ public class Main {
                                             }
 
                                             actorChoice = scanner.nextInt();
-
+                                            scanner.nextLine();
                                             switch (actorChoice) {
                                                 case 0:
                                                     System.out.println("Koniec úpravy zoznamu");
@@ -337,9 +316,9 @@ public class Main {
                                                         catch (FilmNotExists ignored) {}
                                                         catch (CrewMemberAlreadyParticipating e) {
                                                             if (film.getFilmType() == FilmType.ANIMATED_FILM)
-                                                                System.out.println("Dabér již film dabuje");
+                                                                System.out.println("Dabér už film dabuje");
                                                             else
-                                                                System.out.println("Herec již hraje.");
+                                                                System.out.println("Herec už hraje.");
                                                         }
                                                     }
                                                     break;
@@ -364,7 +343,7 @@ public class Main {
 
                                                         System.out.println(i + ": " + crewMember.getName());
                                                     }
-                                                    scanner.nextLine();
+
                                                     int actorToBeDeleted = scanner.nextInt();
                                                     if (actorToBeDeleted >= film.getCrewMembers().size() || actorToBeDeleted < 0) {
                                                         System.out.println("Vybratá položka nexistuje!");
@@ -378,17 +357,9 @@ public class Main {
                                                     }
 
                                                     break;
-
                                             }
 
-
                                     }while(actorChoice != 0);
-
-
-
-
-
-
                                     break;
 
                                 case 5:
@@ -404,20 +375,237 @@ public class Main {
                                     }else
                                         System.out.println("!Táto možnosť nie je dostupná pri hraných filmoch!");
                                     break;
-
-
                             }
 
-
-
-
                         }while(uprava != 0);
+                        break;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// CASE 3
+
+                    case 3:
+
+                        System.out.println("Zadajte názov filmu, ktorý chcete vymazať.");
+                        message = ("Vyberte, ktorú variáciu filmu chcete vymazať.");
+                        movie_name = scanner.nextLine();
+
+                        films = databaseBackend.getFilmsByName(movie_name);
+                        try{film = films.get(selectFilm(scanner,message, films) );}
+                        catch (Exception e){
+                            break;
+                        }
+
+                        try {
+                            databaseBackend.removeFilm(film);
+                        } catch (FilmNotExists e) {
+                        }
+
+                        break;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// CASE 4
+                    case 4:
+                        System.out.println("Zadajte názov filmu, ktorý chcete ohodnotiť.");
+                        message = ("Vyberte, ktorú variáciu filmu chcete ohodnotiť.");
+
+                        movie_name = scanner.nextLine();
+
+                        films = databaseBackend.getFilmsByName(movie_name);
+                        try{film = films.get(selectFilm(scanner,message, films) );}
+                        catch (Exception e){
+                            break;
+                        }
+
+                        byte rating;
+
+                        if(film.getFilmType()== FilmType.ACTED_FILM)
+                        {
+                            do
+                            {
+                                System.out.println("Zadajte počet hviezdičiek filmu <1 - najhoršie ; 5 - najlepšie>");
+                                scanner.nextLine();
+                                rating  = getByte(scanner);
+                            }while (rating < 1 || rating > 5);
+                        }else
+                        {
+                            do
+                            {
+                                System.out.println("Zadajte hodnotenie filmu <1 - najhoršie ; 10 - najlepšie>");
+                                scanner.nextLine();
+                                rating  = getByte(scanner);
+                            }while (rating < 1 || rating > 10);
+                        }
+
+                        System.out.println("Slovne ohodnoťte tento film: ");
+                        String comment = scanner.nextLine();
+
+                        try {
+                            databaseBackend.filmAddReview(film, rating, comment);
+                        } catch (FilmNotExists | ReviewIncorrectAmmountOfPoints e) {
+                            throw new RuntimeException(e);
+                        }
 
 
                         break;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// CASE 5
+                    case 5:
+                        films = databaseBackend.getAllFilms();
+                        System.out.println();
+                        System.out.println("Výpis všetkých filmov:");
+                        for(int i=0; i< films.size();i++)
+                        {
+                            String directorName = films.get(i).getDirector().getName();
+                            if(directorName == null)
+                                directorName= "(žiadny režisér)";
+                            System.out.println();
+                            System.out.println("________________________________________________________________________");
+                            System.out.println(i+": ");
+                            System.out.println("Názov filmu:            "+films.get(i).getName());
+                            System.out.println("Režisér:                "+directorName);
+                            System.out.println("Rok vydania:            "+films.get(i).getReleaseYear());
+                            System.out.println("Typ filmu:              "+films.get(i).getFilmType());
+                            if(films.get(i).getFilmType() == FilmType.ANIMATED_FILM)
+                            {
+                                System.out.println("Doporučený vek divákov:  " + films.get(i).getRecommendedAge());
+                                System.out.println("Zoznam dabérov:     ");
+                            }else System.out.println("Zoznam hercov:     ");
+                            for(int j=0; j<films.get(i).getCrewMembers().size();j++)
+                            {
+                                System.out.println("     "+films.get(i).getCrewMembers().get(j).getName());
+                            }
 
-                    case 0:
+                        }
+                        System.out.println("\n\n\n");
+                        System.out.println("________________________________________________________________________");
+                        System.out.println("________________________________________________________________________");
+                        break;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// CASE 6
+                    case 6:
+                        System.out.println("Zadajte názov filmu, ktorý chcete vyhľadať.");
+                        message = ("Vyberte, ktorú variáciu filmu hľadáte.");
 
+                        movie_name = scanner.nextLine();
+
+                        films = databaseBackend.getFilmsByName(movie_name);
+                        try{film = films.get(selectFilm(scanner,message, films) );}
+                        catch (Exception e){
+                            break;
+                        }
+
+                        String directorName = film.getDirector().getName();
+                        if(directorName == null)
+                            directorName= "(žiadny režisér)";
+                        System.out.println();
+                        System.out.println("________________________________________________________________________");
+                        System.out.println("Názov filmu:            "+film.getName());
+                        System.out.println("Režisér:                "+directorName);
+                        System.out.println("Rok vydania:            "+film.getReleaseYear());
+                        System.out.println("Typ filmu:              "+film.getFilmType());
+                        if(film.getFilmType() == FilmType.ANIMATED_FILM)
+                        {
+                            System.out.println("Doporučený vek divákov:  " + film.getRecommendedAge());
+                            System.out.println("Zoznam dabérov:     ");
+                        }else System.out.println("Zoznam hercov:     ");
+                        for(int j=0; j<film.getCrewMembers().size();j++)
+                        {
+                            System.out.println("     "+film.getCrewMembers().get(j).getName());
+                        }
+                        System.out.println("Hodnotenia divákov:     ");
+
+                        for(int j=0; j<film.getFilmReviews().size();j++)
+                        {
+                            if(film.getFilmType() == FilmType.ACTED_FILM)
+                            {
+                                System.out.print("     "+ (j+1) +". hodnotenie: ");
+                                for(int k =0; k<5;k++)
+                                {
+                                    if(k<film.getFilmReviews().get(j).getPoints())
+                                        System.out.print("*");
+                                    else System.out.print(" ");
+                                }
+                                System.out.println("\t\tKomentár: "+film.getFilmReviews().get(j).getComment());
+                            }else
+                            {
+                                System.out.println("     "+ (j+1) +". hodnotenie: "+film.getFilmReviews().get(j).getPoints() + "/10   Komentár: "+film.getFilmReviews().get(j).getComment());
+                            }
+
+                        }
+                        System.out.println("\n\n\n");
+                        System.out.println("________________________________________________________________________");
+                        System.out.println("________________________________________________________________________");
+                        break;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// CASE 7
+                    case 7:
+                        System.out.println("Zoznam hercov, ktorí hrali vo viac ako 1 filme + zoznam filmov, v ktorých hrali:");
+                        crewMembers = databaseBackend.getAllCrewMembersWithMoreFilms();
+                        for(int i=0; i< crewMembers.size();i++)
+                        {
+                            System.out.println();
+                            System.out.println("________________________________________________________________________");
+                            System.out.println(i+": ");
+                            System.out.println("Meno herca:            "+crewMembers.get(i).getName());
+                            System.out.println("Zoznam filmov:     ");
+                            for(int j=0; j<crewMembers.get(i).getParticipations().size();j++)
+                            {
+                                System.out.println("\t\t"+crewMembers.get(i).getParticipations().get(j).getName());
+                            }
+
+                        }
+                        System.out.println("\n\n\n");
+                        System.out.println("________________________________________________________________________");
+                        System.out.println("________________________________________________________________________");
+                        break;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// CASE 8
+                    case 8:
+                        System.out.println("Vyberte osobu, ktorej filmy chcete vyhľadať.");
+                        crewMembers = databaseBackend.getAllCrewMembers();
+                        vyber = vyberExistingCrewMembers(databaseBackend, scanner);
+                        if(vyber == -1)
+                            break;
+                        System.out.println();
+                        System.out.println("________________________________________________________________________");
+                        System.out.println("Zoznam filmov, na ktorých spolupracovala osoba "+crewMembers.get(vyber).getName()+": ");
+                        films = databaseBackend.getAllFilmsWithGivenCrewMemberOrDirector(crewMembers.get(vyber));
+                        for(int i=0;i<films.size();i++)
+                        {
+                            System.out.println("\t\t\t\t\t\t\t\t\t\t\t\t"+films.get(i).getName());
+                        }
+                        System.out.println("________________________________________________________________________");
+                        System.out.println("________________________________________________________________________");
+                        break;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// CASE 9
+                    case 9:
+                        System.out.println("Zadajte názov filmu, ktorý chcete vyhľadať.");
+                        message = ("Vyberte, ktorú variáciu filmu chcete uložiť.");
+
+                        movie_name = scanner.nextLine();
+
+                        films = databaseBackend.getFilmsByName(movie_name);
+                        try{film = films.get(selectFilm(scanner,message, films) );}
+                        catch (Exception e){
+                            break;
+                        }
+                        System.out.println("Zadajte názov súboru, do ktorého chcete uložiť informácie o filme.");
+                        String file_name = scanner.nextLine();
+                        try {
+                            databaseBackend.saveFilmToFile(file_name,film);
+                        } catch (FilmExportError e) {
+                            throw new RuntimeException(e);
+                        }
+                        break;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// CASE 10
+                    case 10:
+                        System.out.println("Zadajte názov súboru, z ktorého chcete načítať informácie o filme.");
+                        file_name = scanner.nextLine();
+                        try {
+                            film = databaseBackend.loadFilmFromFile(file_name);
+                        } catch (FilmImportError e) {
+                            throw new RuntimeException(e);
+                        }
+                        System.out.println("Načítané informácie o filme: ");
+                        System.out.println("Názov filmu: "+film.getName());
+                        System.out.println("Rok vydania: "+film.getReleaseYear());
+                        System.out.println("Typ filmu: "+film.getFilmType());
+                        System.out.println("Hodnotenie filmu: "+film.getDirector().getName());
+                        break;
+
+                    default:
                         break;
 
 
@@ -460,6 +648,39 @@ public class Main {
             System.out.println("Error pri ukladanie");
             // vraci FALSE pokud ukladani selze
         }
+    }
+
+    private static int selectFilm(Scanner scanner, String message, ArrayList<Film> films) {
+        Film film;
+        int sc;
+        if(films.size() == 0)
+        {
+            System.out.println("Film neexistuje.");
+            return -1;
+
+        }else if(films.size() == 1)
+        {
+            film = films.get(0);
+
+        } else
+        {
+            do
+            {
+                System.out.println(message);
+                for(int i=0; i< films.size();i++)
+                {
+                    String directorName = films.get(i).getDirector().getName();
+                    if(directorName == null)
+                        directorName= "(žiadny režisér)";
+
+                    System.out.println(i+ ": " +films.get(i).getName()+"    rok: "+films.get(i).getReleaseYear()+"   režisér: "+directorName+"   typ:"+films.get(i).getFilmType());
+                }
+                sc = scanner.nextInt();
+
+            }while (sc < 0 || sc >= films.size());
+            return sc;
+        }
+        return 0;
     }
 
     public static short getShort(Scanner scanner) {
@@ -521,31 +742,32 @@ public class Main {
         do
         {
             System.out.println("Vyberte si "+ type + ".");
-            scanner.nextLine();
+
             vyber = getInt(scanner);
+
 
         }while(vyber<0 || vyber >index);
         return vyber;
     }
 
-    /*
-    public static String getDirectorName(Film film)
+    public static int vyberExistingCrewMembers(DatabaseBackend databaseBackend, Scanner scanner)
     {
-        ArrayList<CrewMember> crewMembers = film.getCrewMembers();
-        String directorName = "reziser sa nenasiel";
-        for(int j=0; j<crewMembers.size();j++)
+        ArrayList<CrewMember> crewMembers = databaseBackend.getAllCrewMembers();
+        int index = 0;
+        for ( index=0; index< crewMembers.size(); index++)
         {
-            ArrayList<CrewRole> roles = crewMembers.get(j).getRolesInGivenFilm(film);
-            for(int k=0; k< roles.size(); k++)
-            {
-                if (roles.contains(DIRECTOR))
-                {
-                    directorName = crewMembers.get(j).getName() ;
-                }
-            }
+            System.out.println(index+ ": " +crewMembers.get(index).getName());
         }
-        return directorName;
+        int vyber = -1;
+        do
+        {
+            System.out.println("Vyberte si osobu.");
+
+            vyber = getInt(scanner);
+
+
+        }while(vyber<0 || vyber >=index);
+        return vyber;
     }
-    */
 
 }

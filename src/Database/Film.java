@@ -11,6 +11,26 @@ public abstract class Film {
     protected ArrayList<CrewMember> crewMembers = new ArrayList<>();
     protected ArrayList<Review> filmReviews = new ArrayList<>();
 
+    public void sortReviews()
+    {
+        this.filmReviews.sort((o1, o2) -> o1.getPoints() - o2.getPoints());
+        /*
+        for (int i = 0; i < this.filmReviews.size(); i++)
+        {
+            for (int j = 0; j < this.filmReviews.size() - 1; j++)
+            {
+                if (this.filmReviews.get(j).getPoints() < this.filmReviews.get(j + 1).getPoints())
+                {
+                    Review temp = this.filmReviews.get(j);
+                    this.filmReviews.set(j, this.filmReviews.get(j + 1));
+                    this.filmReviews.set(j + 1, temp);
+                }
+            }
+        }
+        */
+
+    }
+
 
     public String getName() {
         return this.name;
