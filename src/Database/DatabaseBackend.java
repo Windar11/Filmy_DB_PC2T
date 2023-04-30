@@ -93,10 +93,15 @@ public class DatabaseBackend {
     public void filmAddCrewMemberExistingCrewMember(Film film, CrewMember crewMember) throws FilmNotExists, CrewMemberAlreadyParticipating {
         if (!this.films.contains(film))
             throw new FilmNotExists();
-        if (!film.addCrewMember(crewMember))
+        if (!film.addCrewMember(crewMember)) {
             throw new CrewMemberAlreadyParticipating();
-        else
-            crewMember.addParticipation(film);
+        }
+        else {
+            try {
+                crewMember.addParticipation(film);
+            }
+            catch (CrewMemberAlreadyParticipating ignored) {}
+        }
     }
     public void filmRemoveCrewMember(Film film, CrewMember crewMember) throws FilmNotExists, CrewMemberNotMemberOfGivenFilm {
         if (!this.films.contains(film))

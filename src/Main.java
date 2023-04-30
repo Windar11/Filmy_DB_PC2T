@@ -287,8 +287,7 @@ public class Main {
                                             }
                                             for (int i = 0; i < film.getCrewMembers().size(); i++) {
                                                 crewMember = film.getCrewMembers().get(i);
-                                                if (crewMember == film.getDirector())
-                                                    continue;
+
 
                                                 System.out.println(i + ": " + crewMember.getName());
                                             }
@@ -334,9 +333,13 @@ public class Main {
                                                     } else {
                                                         try {
                                                             databaseBackend.filmAddCrewMemberExistingCrewMember(film, crewMembers.get(vyber));
-                                                        } catch (FilmNotExists e) {
-                                                        } catch (CrewMemberAlreadyParticipating e) {
-                                                           System.out.println("");
+                                                        }
+                                                        catch (FilmNotExists ignored) {}
+                                                        catch (CrewMemberAlreadyParticipating e) {
+                                                            if (film.getFilmType() == FilmType.ANIMATED_FILM)
+                                                                System.out.println("Dabér již film dabuje");
+                                                            else
+                                                                System.out.println("Herec již hraje.");
                                                         }
                                                     }
                                                     break;
