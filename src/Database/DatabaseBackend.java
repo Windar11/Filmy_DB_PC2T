@@ -32,10 +32,14 @@ public class DatabaseBackend {
     public boolean removeFilm(Film film) throws FilmNotExists {
         if (this.films.contains(film)) {
             for (CrewMember crewMember: film.getCrewMembers()) {
-                crewMember.removeFilmFromParticipations(film);
-                if (crewMember.getParticipations().size()==0)
-                    this.crewMembers.remove(crewMember);
+                    crewMember.removeFilmFromParticipations(film);
+                    if (crewMember.getParticipations().size()==0)
+                        this.crewMembers.remove(crewMember);
             }
+            CrewMember director = film.getDirector();
+                director.removeFilmFromParticipations(film);
+                if (director.getParticipations().size()==0)
+                    this.crewMembers.remove(director);
             this.films.remove(film);
         }
         throw new FilmNotExists();
@@ -290,7 +294,7 @@ public class DatabaseBackend {
 
     public Film loadFilmFromFile(String fileName) throws FilmImportError {
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader("fileName", StandardCharsets.UTF_8));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName, StandardCharsets.UTF_8));
             JSONTokener tokener = new JSONTokener(bufferedReader);
             JSONObject filmJSON = new JSONObject(tokener);
             Film film;
@@ -308,19 +312,27 @@ public class DatabaseBackend {
                 filmType = FilmType.ANIMATED_FILM;
             else
                 throw new BadFileInput();
-
-            ArrayList<Film> filmsWithSameName = this.getFilmsByName(filmName);
-            if (filmsWithSameName.size() != 0)
-                filmName += " !i";
+            while(true) {
+                ArrayList<Film> filmsWithSameName = this.getFilmsByName(filmName);
+                if (filmsWithSameName.size() != 0)
+                    filmName += " -!i";
+                else
+                    break;
+            }
             switch (filmType) {
                 case ACTED_FILM -> film = new ActedFilm(filmName, releaseYear, recommendedAge);
                 case ANIMATED_FILM -> film = new AnimatedFilm(filmName, releaseYear);
                 default -> throw new BadFileInput();
             }
-
-            ArrayList<CrewMember> crewMembersWithSameName = this.getCrewMembersByName(directorName);
-            if (crewMembersWithSameName.size() != 0)
-                directorName += " !i";
+            this.films.add(film);
+            ArrayList<CrewMember> crewMembersWithSameName;
+            while(true) {
+                crewMembersWithSameName = this.getCrewMembersByName(directorName);
+                if (crewMembersWithSameName.size() != 0)
+                    directorName += " -!i";
+                else
+                    break;
+            }
             this.filmUpdateDirectorNewDirector(film, directorName);
             for (int i = 0; i < reviews.length(); i++) {
                 JSONObject reviewJSON = reviews.getJSONObject(i);
@@ -338,14 +350,19 @@ public class DatabaseBackend {
             }
             for (int i = 0; i < crewMembers.length(); i++) {
                 String crewMemberName = crewMembers.getString(i);
-                crewMembersWithSameName = this.getCrewMembersByName(crewMemberName);
-                if (crewMembersWithSameName.size() != 0)
-                    crewMemberName += " !i";
+                while(true) {
+                    crewMembersWithSameName = this.getCrewMembersByName(crewMemberName);
+                    if (crewMembersWithSameName.size() != 0)
+                        crewMemberName += " -!i";
+                    else
+                        break;
+                }
                 this.filmAddCrewMemberNewCrewMember(film, crewMemberName);
             }
             return film;
         }
         catch (Exception e) {
+            e.printStackTrace();
             throw new FilmImportError();
         }
     }
@@ -376,6 +393,7 @@ public class DatabaseBackend {
             writer.close();
         }
         catch (Exception e) {
+            e.printStackTrace();
             throw new FilmExportError();
         }
     }

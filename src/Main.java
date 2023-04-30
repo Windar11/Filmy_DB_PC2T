@@ -581,6 +581,7 @@ public class Main {
                         catch (Exception e){
                             break;
                         }
+                        scanner.nextLine();
                         System.out.println("Zadajte názov súboru, do ktorého chcete uložiť informácie o filme.");
                         String file_name = scanner.nextLine();
                         try {
@@ -591,6 +592,7 @@ public class Main {
                         break;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// CASE 10
                     case 10:
+                        scanner.nextLine();
                         System.out.println("Zadajte názov súboru, z ktorého chcete načítať informácie o filme.");
                         file_name = scanner.nextLine();
                         try {
