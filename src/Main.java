@@ -1,19 +1,14 @@
 import Database.*;
-
-import javax.lang.model.type.NullType;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import static Database.CrewRole.DIRECTOR;
-
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         DatabaseBackend databaseBackend = new DatabaseBackend();
         if (!databaseBackend.loadDataFromSQL()) {
             System.out.println("Error pri nahravanie");
-            // VRACI FALSE POKUD NACITANI Z SQL DATABAZE SELZE - je treba resit v user interface
         }
         int choice = 0;
         Boolean isAnimated = null;
@@ -108,7 +103,6 @@ public class Main {
                                 databaseBackend.filmUpdateDirectorExistingDirector(film, crewMembers.get(vyber));
                             } catch (FilmNotExists e) {
                                 //ignore
-
                             }
                         }
 
