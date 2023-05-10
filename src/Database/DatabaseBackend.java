@@ -1,13 +1,9 @@
 package Database;
 
-
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-
 import java.io.*;
-import java.nio.Buffer;
 import java.nio.charset.StandardCharsets;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,7 +25,7 @@ public class DatabaseBackend {
     public ArrayList<Film> getAllFilms() {
         return this.films;
     }
-    public boolean removeFilm(Film film) throws FilmNotExists {
+    public void removeFilm(Film film) throws FilmNotExists {
         if (this.films.contains(film)) {
             for (CrewMember crewMember: film.getCrewMembers()) {
                     crewMember.removeFilmFromParticipations(film);
